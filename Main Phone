@@ -1,0 +1,129 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Contact {
+    private String name;
+    private String phoneNumber;
+    private String email;
+
+    public Contact(String name, String phoneNumber, String email) {
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String toString() {
+        return "Имя: " + name + ", Телефон: " + phoneNumber + ", Email: " + email;
+    }
+}
+
+class PhoneBook {
+    private ArrayList<Contact> contacts;
+
+    public PhoneBook() {
+        this.contacts = new ArrayList<>();
+    }
+
+    public void addContact(Contact contact) {
+        contacts.add(contact);
+        System.out.println("Контакт \"" + contact.getName() + "\" добавлен в телефонную книгу.");
+    }
+
+    public void listContacts() {
+        if (contacts.isEmpty()) {
+            System.out.println("Телефонная книга пуста.");
+        } else {
+            System.out.println("Список контактов:");
+            for (Contact contact : contacts) {
+                System.out.println(contact);
+            }
+        }
+    }
+
+    public void searchContact(String name) {
+        boolean found = false;
+        for (Contact contact : contacts) {
+            if (contact.getName().equalsIgnoreCase(name)) {
+                System.out.println("Найден контакт: " + contact);
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            System.out.println("Контакт с именем \"" + name + "\" не найден.");
+        }
+    }
+
+    public void removeContact(String name) {
+        boolean removed = false;
+        for (Contact contact : contacts) {
+            if (contact.getName().equalsIgnoreCase(name)) {
+                contacts.remove(contact);
+                System.out.println("Контакт \"" + name + "\" удален из телефонной книги.");
+                removed = true;
+                break;
+            }
+        }
+        if (!removed) {
+            System.out.println("Контакт с именем \"" + name + "\" не найден.");
+        }
+    }
+}
+
+public class PhoneBookManager {
+    public static void main(String[] args) {
+        PhoneBook phoneBook = new PhoneBook();
+        Scanner scanner = new Scanner(System.in);
+        String name, phoneNumber, email;
+
+        while (true) {
+            System.out.println("\nМеню:");
+            System.out.println("1. Добавить контакт");
+            System.out.println("2. Показать список контактов");
+            System.out.println("3. Найти контакт по имени");
+            System.out.println("4. Удалить контакт");
+            System.out.println("5. Выйти");
+
+            System.out.print("Выберите действие: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine();  // Consume newline
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Введите имя: ");
+                    name = scanner.nextLine();
+                    System.out.print("Введите номер телефона: ");
+                    phoneNumber = scanner.nextLine();
+                    System.out.print("Введите email: ");
+                    email = scanner.nextLine();
+                    Contact contact = new Contact(name, phoneNumber, email);
+                    phoneBook.addContact(contact);
+                    break;
+                case 2:
+                    phoneBook.listContacts();
+                    break;
+                case 3:
+                    System.out.print("Введите имя для поиска: ");
+                    name = scanner.nextLine();
+                    phoneBook.searchContact(name);
+                    break;
+                case 4:
+                    System.out.print("Введите имя для удаления: ");
+                    name = scanner.nextLine();
+                    phoneBook.removeContact(name);
+                    break;
+                case 5:
+                    System.out.println("Выход из программы...");
+                    scanner.close();
+                    return;
+                default:
+                    System.out.println("Ошибка: Неверный выбор.");
+            }
+        }
+    }
+}
